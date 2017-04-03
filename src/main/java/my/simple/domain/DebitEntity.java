@@ -1,13 +1,14 @@
 package my.simple.domain;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 
 /**
  * Created by jmfedorov on 02.04.17.
  */
 @Entity
 @Table(name = "debit", schema = "public", catalog = "postgres")
-public class DebitEntity {
+public class DebitEntity implements my.simple.domain.Entity{
     private int pyingUser;
     private int idCost;
     private int id;
@@ -62,5 +63,10 @@ public class DebitEntity {
         result = 31 * result + idCost;
         result = 31 * result + id;
         return result;
+    }
+
+    @Override
+    public Class gettype() {
+        return this.getClass();
     }
 }

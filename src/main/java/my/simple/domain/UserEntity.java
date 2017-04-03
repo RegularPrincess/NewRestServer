@@ -1,13 +1,14 @@
 package my.simple.domain;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 
 /**
  * Created by jmfedorov on 02.04.17.
  */
 @Entity
 @Table(name = "users", schema = "public", catalog = "postgres")
-public class UserEntity {
+public class UserEntity implements my.simple.domain.Entity {
     private int id;
     private String name;
     private Integer idRoom;
@@ -101,5 +102,10 @@ public class UserEntity {
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (login != null ? login.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public Class gettype() {
+        return this.getClass();
     }
 }

@@ -1,4 +1,4 @@
-package my.simple.dao.interfaces;
+package my.simple.dao.interfaces.specialDAO;
 
 /**
  * Created by jmfedorov on 02.04.17.
