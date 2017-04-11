@@ -1,16 +1,14 @@
 package my.simple.dao.interfaces;
 
-import my.simple.domain.Entity;
-
-import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by jmfedorov on 03.04.17.
  */
 public interface CrudDAO {
-    void add(Entity object);
-    Entity getById(int id);
-    void update(Entity object);
-    void delete(int id);
+    void add(Object object, Class typeParameterClass);
+    Object getById(int id, Class typeParameterClass);
+    void update(Object object);
+    void delete(int id, Class typeParameterClass);
 
 }

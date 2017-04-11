@@ -2,18 +2,19 @@ package my.simple.domain;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import java.util.List;
 
 /**
  * Created by jmfedorov on 02.04.17.
  */
 @Entity
-@Table(name = "room", schema = "public", catalog = "postgres")
-public class RoomEntity implements my.simple.domain.Entity{
+public class RoomEntity{
     private int id;
-    private Integer number;
+    private String name;
+    private List<UserEntity> users;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -22,14 +23,21 @@ public class RoomEntity implements my.simple.domain.Entity{
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "number", nullable = true)
-    public Integer getNumber() {
-        return number;
+    public String getName() {
+        return name;
     }
 
-    public void setNumber(Integer number) {
-        this.number = number;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})//(fetch = FetchType.LAZY)
+    public List<UserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserEntity> users) {
+        this.users = users;
     }
 
     @Override
@@ -40,20 +48,13 @@ public class RoomEntity implements my.simple.domain.Entity{
         RoomEntity that = (RoomEntity) o;
 
         if (id != that.id) return false;
-        if (number != null ? !number.equals(that.number) : that.number != null) return false;
-
-        return true;
+        return name != null ? name.equals(that.name) : that.name == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (number != null ? number.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public Class gettype() {
-        return this.getClass();
     }
 }

@@ -1,21 +1,15 @@
 package my.simple.dao.impl;
 
 import my.simple.dao.interfaces.CrudDAO;
-import my.simple.dao.utils.HibernateUtil;
-import my.simple.domain.Entity;
+import my.simple.util.HibernateUtil;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
-public class CrudDAOImpl<Bean> implements CrudDAO {
-
-    protected final Class typeParameterClass;
-
-
-    public CrudDAOImpl(Class typeParameterClass) {
-        this.typeParameterClass = typeParameterClass;
-    }
+@Repository
+public class  CrudDAOImpl implements CrudDAO {
 
     @Override
-    public void add(Entity object) {
+    public void add(Object object, Class typeParameterClass) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
         session.save(object);
@@ -26,10 +20,10 @@ public class CrudDAOImpl<Bean> implements CrudDAO {
     }
 
     @Override
-    public Entity getById(int id) {
+    public Object getById(int id, Class typeParameterClass) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        Entity result = (Entity) session.get(typeParameterClass, id);
+        Object result = session.get(typeParameterClass, id);
         session.getTransaction().commit();
         if (session.isOpen()) {
             session.close();
@@ -38,7 +32,7 @@ public class CrudDAOImpl<Bean> implements CrudDAO {
     }
 
     @Override
-    public void update(Entity object) {
+    public void update(Object object) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
         session.update(object);
@@ -49,10 +43,10 @@ public class CrudDAOImpl<Bean> implements CrudDAO {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id, Class typeParameterClass) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        Bean del = (Bean) session.get(typeParameterClass, id);
+        Object del = session.get(typeParameterClass, id);
         session.delete(del);
         session.getTransaction().commit();
         if (session.isOpen()) {

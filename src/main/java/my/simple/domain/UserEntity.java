@@ -2,22 +2,23 @@ package my.simple.domain;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import java.util.List;
 
 /**
  * Created by jmfedorov on 02.04.17.
  */
 @Entity
-@Table(name = "users", schema = "public", catalog = "postgres")
-public class UserEntity implements my.simple.domain.Entity {
+public class UserEntity {
     private int id;
     private String name;
-    private Integer idRoom;
     private String phone;
     private String password;
     private String login;
+    private List<CostEntity> costs;
+
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -26,8 +27,6 @@ public class UserEntity implements my.simple.domain.Entity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "name", nullable = false, length = 100)
     public String getName() {
         return name;
     }
@@ -36,18 +35,6 @@ public class UserEntity implements my.simple.domain.Entity {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "id_room", nullable = true)
-    public Integer getIdRoom() {
-        return idRoom;
-    }
-
-    public void setIdRoom(Integer idRoom) {
-        this.idRoom = idRoom;
-    }
-
-    @Basic
-    @Column(name = "phone", nullable = true, length = 11)
     public String getPhone() {
         return phone;
     }
@@ -56,8 +43,6 @@ public class UserEntity implements my.simple.domain.Entity {
         this.phone = phone;
     }
 
-    @Basic
-    @Column(name = "password", nullable = false, length = 30)
     public String getPassword() {
         return password;
     }
@@ -66,14 +51,22 @@ public class UserEntity implements my.simple.domain.Entity {
         this.password = password;
     }
 
-    @Basic
-    @Column(name = "login", nullable = false, length = 30)
     public String getLogin() {
         return login;
     }
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})//(fetch = FetchType.LAZY)
+    @OrderBy("createTime DESC")
+    public List<CostEntity> getCosts() {
+        return costs;
+    }
+
+    public void setCosts(List<CostEntity> costs) {
+        this.costs = costs;
     }
 
     @Override
@@ -85,27 +78,18 @@ public class UserEntity implements my.simple.domain.Entity {
 
         if (id != that.id) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (idRoom != null ? !idRoom.equals(that.idRoom) : that.idRoom != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (login != null ? !login.equals(that.login) : that.login != null) return false;
-
-        return true;
+        return login != null ? login.equals(that.login) : that.login == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (idRoom != null ? idRoom.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (login != null ? login.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public Class gettype() {
-        return this.getClass();
     }
 }

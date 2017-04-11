@@ -1,21 +1,20 @@
 package my.simple.domain;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
+import java.util.Date;
 
 /**
  * Created by jmfedorov on 02.04.17.
  */
 @Entity
-@Table(name = "cost", schema = "public", catalog = "postgres")
-public class CostEntity implements my.simple.domain.Entity{
+public class CostEntity {
     private int id;
     private int amount;
-    private int idAuthor;
     private String object;
+    private Date createTime;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -24,8 +23,15 @@ public class CostEntity implements my.simple.domain.Entity{
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "amount", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
     public int getAmount() {
         return amount;
     }
@@ -34,18 +40,6 @@ public class CostEntity implements my.simple.domain.Entity{
         this.amount = amount;
     }
 
-    @Basic
-    @Column(name = "id_author", nullable = false)
-    public int getIdAuthor() {
-        return idAuthor;
-    }
-
-    public void setIdAuthor(int idAuthor) {
-        this.idAuthor = idAuthor;
-    }
-
-    @Basic
-    @Column(name = "object", nullable = false, length = 300)
     public String getObject() {
         return object;
     }
@@ -63,23 +57,14 @@ public class CostEntity implements my.simple.domain.Entity{
 
         if (id != that.id) return false;
         if (amount != that.amount) return false;
-        if (idAuthor != that.idAuthor) return false;
-        if (object != null ? !object.equals(that.object) : that.object != null) return false;
-
-        return true;
+        return object != null ? object.equals(that.object) : that.object == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
         result = 31 * result + amount;
-        result = 31 * result + idAuthor;
         result = 31 * result + (object != null ? object.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public Class gettype() {
-        return this.getClass();
     }
 }
